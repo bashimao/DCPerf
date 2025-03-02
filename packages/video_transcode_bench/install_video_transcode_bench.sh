@@ -13,7 +13,8 @@ declare -A REPOS=(
     ['SVT-AV1']='https://gitlab.com/AOMediaCodec/SVT-AV1.git'
     ['vmaf']='https://github.com/Netflix/vmaf.git'
     ['aom-testing']='https://gitlab.com/AOMediaCodec/aom-testing.git'
-    ['x264']='https://code.videolan.org/videolan/x264.git'
+    #['x264']='https://code.videolan.org/videolan/x264.git'
+    ['x264']='https://code.videolan.org/nekobasu/x264.git'
 )
 
 declare -A TAGS=(
@@ -22,7 +23,8 @@ declare -A TAGS=(
     ['SVT-AV1']='v3.0.0'
     ['vmaf']='v3.0.0'
     ['aom-testing']='master'
-    ['x264']='4613ac3c15fd75cebc4b9f65b7fb95e70a3acce1'
+    #['x264']='4613ac3c15fd75cebc4b9f65b7fb95e70a3acce1'
+    ['x264']='workbench'
 )
 
 
