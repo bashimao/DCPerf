@@ -15,6 +15,7 @@ Installing VideoTranscodeBench involves two steps.
 
 ```
 ./benchpress_cli.py install video_transcode_bench_svt
+./benchpress_cli.py install video_transcode_bench_x264
 ```
 
 ### 2. Download and prepare datasets
@@ -30,6 +31,7 @@ To run VideoTranscodeBench, simply execute the following command
 
 ```
 ./benchpress_cli.py run video_transcode_bench_svt
+./benchpress_cli.py run video_transcode_bench_x264
 ```
 
 This job also has the following optional parameters:

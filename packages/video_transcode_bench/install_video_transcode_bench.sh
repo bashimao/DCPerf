@@ -41,12 +41,17 @@ LINUX_DIST_ID="$(awk -F "=" '/^ID=/ {print $2}' /etc/os-release | tr -d '"')"
 
 if [ "$LINUX_DIST_ID" = "ubuntu" ]; then
   sudo apt install -y cmake autoconf automake flex bison \
-    meson nasm clang patch git \
+    meson nasm clang-17 patch git \
     python3-dev pkg-config time parallel p7zip
 elif [ "$LINUX_DIST_ID" = "centos" ]; then
   sudo dnf install -y cmake autoconf automake flex bison \
-    meson nasm clang patch \
+    meson nasm clang-17 patch \
     git python3-devel time parallel p7zip
+fi
+
+platform_cc_flags=""
+if [[ $(uname -m) = "aarch64" ]]; then
+    platform_cc_flags="-march=armv9-a -mtune=neoverse-v2 -msve-vector-bits=128"
 fi
 
 mkdir -p "${FFMPEG_SOURCE}"
@@ -80,7 +85,8 @@ build_x264()
     clone $lib || echo "Failed to clone $lib"
     cd "$lib" || exit
     mkdir -p _build && cd _build || exit
-    ../configure --prefix="${FFMPEG_BUILD}" --enable-static
+    export CC="/usr/bin/clang-17"
+    ../configure --prefix="${FFMPEG_BUILD}" --enable-static --extra-cflags="${platform_cc_flags}"
     make -j "$(nproc)" && make install
     popd || exit
 }
@@ -139,14 +145,14 @@ build_ffmpeg()
             --enable-gpl --enable-nonfree --enable-version3 \
             --enable-static --disable-shared \
             --pkg-config-flags=--static \
-            --cc="clang" \
-            --cxx="clang++" \
+            --cc="clang-17" \
+            --cxx="clang++-17" \
             --enable-libx264 \
             --enable-libaom \
             --enable-libsvtav1 \
             --enable-libvmaf \
-            --extra-cflags="-I${FFMPEG_BUILD}/include " \
-            --extra-cxxflags="-I${FFMPEG_BUILD}/include " \
+            --extra-cflags="-I${FFMPEG_BUILD}/include ${platform_cc_flags}" \
+            --extra-cxxflags="-I${FFMPEG_BUILD}/include ${platform_cc_flags}" \
             --extra-ldflags="-L${FFMPEG_BUILD}/lib" \
             --prefix="${FFMPEG_BUILD}"
 
@@ -156,14 +162,14 @@ build_ffmpeg()
             --enable-gpl --enable-nonfree --enable-version3 \
             --enable-static --disable-shared \
             --pkg-config-flags=--static \
-            --cc="clang" \
-            --cxx="clang++" \
+            --cc="clang-17" \
+            --cxx="clang++-17" \
             --enable-libx264 \
             --enable-libaom \
             --enable-libsvtav1 \
             --enable-libvmaf \
-            --extra-cflags="-I${FFMPEG_BUILD}/include " \
-            --extra-cxxflags="-I${FFMPEG_BUILD}/include " \
+            --extra-cflags="-I${FFMPEG_BUILD}/include ${platform_cc_flags}" \
+            --extra-cxxflags="-I${FFMPEG_BUILD}/include ${platform_cc_flags}" \
             --extra-ldflags="-L${FFMPEG_BUILD}/lib" \
             --prefix="${FFMPEG_BUILD}"
 
